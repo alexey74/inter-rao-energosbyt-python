@@ -512,7 +512,7 @@ class BaseEnergosbytAPI(ABC):
                             "[%d] -> (a%d) (%s) %s" % (counter, attempt, encoded_params, post_data)
                         )
                         async with self._session.post(
-                            request_url, data=post_data, raise_for_status=True
+                            request_url, data=post_data, raise_for_status=True, ssl=False
                         ) as response:
                             status = response.status
                             response_text = await response.text()  # TODO: encoding required?
@@ -609,7 +609,7 @@ class BaseEnergosbytAPI(ABC):
     async def async_authenticate(self) -> None:
         # This is required to reset session cookie
         self._session.cookie_jar.clear()
-        async with self._session.get(self.AUTH_URL) as response:
+        async with self._session.get(self.AUTH_URL, ssl=False) as response:
             pass
 
         response = (
